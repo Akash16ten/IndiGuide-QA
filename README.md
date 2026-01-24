@@ -1,7 +1,7 @@
 # IndiGuide-QA 
 *A Retrieval-Augmented Generation (RAG) system for Indian Government Schemes*
 
-## 📌 Overview
+## Overview
 IndiGuide-QA is an AI-powered question-answering system that allows users to ask natural language questions about Indian government schemes and receive accurate, grounded answers directly from official government websites.
 
 The system uses **Retrieval-Augmented Generation (RAG)** to ensure answers are:
@@ -13,7 +13,7 @@ Currently, the project is implemented using data from the **SERB International R
 
 ---
 
-## 🧠 How It Works (High Level)
+## How It Works
 
 1. **Web Scraping**
    - Scrapes official government webpages
@@ -37,7 +37,7 @@ Currently, the project is implemented using data from the **SERB International R
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Language**: Python  
 - **Embeddings**: SentenceTransformers (`all-MiniLM-L6-v2`)  
@@ -48,7 +48,7 @@ Currently, the project is implemented using data from the **SERB International R
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 RAG Agent/
 │
@@ -71,7 +71,7 @@ RAG Agent/
 
 ---
 
-## 🚀 Future Enhancements
+## Future Enhancements
 
 - Support for multiple government schemes and ministries
 - Web-based user interface
@@ -81,5 +81,5 @@ RAG Agent/
 
 ---
 
-## 📜 Disclaimer
+## Disclaimer
 This project is for educational purposes. All information is sourced from publicly available government websites.
