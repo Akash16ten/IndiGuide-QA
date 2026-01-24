@@ -1,4 +1,4 @@
-# IndiGuide-QA 🇮🇳  
+# IndiGuide-QA 
 *A Retrieval-Augmented Generation (RAG) system for Indian Government Schemes*
 
 ## 📌 Overview
