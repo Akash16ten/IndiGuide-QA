@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import json
 import numpy as np
-import subprocess
+import requests
 
 # ---------- Paths ----------
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,14 +58,21 @@ Answer in clear, simple language.
 Mention the relevant section names.
 """
 
-# ---------- Call local LLM via Ollama ----------
-result = subprocess.run(
-    ["ollama", "generate", "mistral", "-p", prompt],
-    text=True,
-    capture_output=True,
+
+# ---------- Call local LLM via Ollama (HTTP API) ----------
+response = requests.post(
+    "http://localhost:11434/api/generate",
+    json={
+        "model": "gemma:2b",
+        "prompt": prompt,
+        "stream": False
+    },
     timeout=120
 )
 
-
 print("\nANSWER:\n")
-print(result.stdout)
+
+if response.status_code == 200:
+    print(response.json()["response"])
+else:
+    print("Error from Ollama:", response.text)
