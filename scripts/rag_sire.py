@@ -33,11 +33,11 @@ def answer_question(query: str) -> dict:
     using Retrieval-Augmented Generation (RAG).
     """
 
-    # ---------- Embed the query ----------
+    # ---------- Embed query ----------
     query_embedding = embedder.encode([query])
 
-    # ---------- Retrieve relevant chunks ----------
-    k = 4
+    # ---------- Retrieve chunks ----------
+    k = 6
     _, indices = index.search(np.array(query_embedding), k)
 
     retrieved_chunks = []
@@ -52,12 +52,15 @@ def answer_question(query: str) -> dict:
 
     context = "\n\n".join(retrieved_chunks)
 
-    # ---------- Build prompt ----------
+    # ---------- Prompt ----------
     prompt = f"""
 You are an assistant answering questions using official government information.
 
-Use ONLY the context below to answer.
-If the answer is not present, say you do not have sufficient information.
+Use the context below as the primary source to answer.
+If the answer can be reasonably inferred from the context, answer clearly.
+If the context truly does not contain the information, then say so.
+
+If an Eligibility section is present, extract eligibility criteria from it.
 
 Context:
 {context}
@@ -66,11 +69,15 @@ Question:
 {query}
 
 Answer in clear, simple language.
+Combine information from multiple sections if needed.
+Give a detailed, complete answer using full sentences.
 Mention the relevant section names.
 Do NOT include headings like "ANSWER:" in your response.
+Do NOT be brief.
 """
 
-    # ---------- Call local LLM via Ollama (HTTP API) ----------
+
+    # ---------- Call Ollama ----------
     response = requests.post(
         "http://localhost:11434/api/generate",
         json={
@@ -87,19 +94,21 @@ Do NOT include headings like "ANSWER:" in your response.
             "sources": []
         }
 
+    data = response.json()
+
     return {
-        "answer": response.json()["response"].strip(),
+        "answer": data.get("response", "").strip(),
         "sources": list(source_sections)
     }
 
 
-# ---------- CLI mode ----------
+# ---------- CLI ----------
 if __name__ == "__main__":
-    user_query = input("Ask a question about the SIRE scheme: ")
-    result = answer_question(user_query)
+    q = input("Ask a question about the SIRE scheme: ")
+    res = answer_question(q)
 
     print("\nANSWER:\n")
-    print(result["answer"])
+    print(res["answer"])
     print("\nSOURCES:")
-    for src in result["sources"]:
-        print(f"- {src}")
+    for s in res["sources"]:
+        print("-", s)
